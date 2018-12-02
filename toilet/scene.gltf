@@ -1,0 +1,240 @@
+{
+  "accessors": [
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 53000,
+      "max": [
+        0.33932679891586304,
+        0.77131670713424683,
+        0.20226112008094788
+      ],
+      "min": [
+        -0.41871601343154907,
+        0,
+        -0.22568435966968536
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 636000,
+      "componentType": 5126,
+      "count": 53000,
+      "max": [
+        0.99999880790710449,
+        1,
+        1
+      ],
+      "min": [
+        -0.99998891353607178,
+        -1,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 53000,
+      "max": [
+        1,
+        0.78616726398468018,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -0.88782161474227905,
+        -1,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 54390,
+      "max": [
+        52999
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "allenbranch (https://sketchfab.com/allenbranch)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/models/00b360de1846428eb5c23464824c5fc8",
+      "title": "KOHLER K-3754-0 Kelston Comfort Height Toilet"
+    },
+    "generator": "Sketchfab-3.18.6",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 217560,
+      "byteOffset": 0,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1272000,
+      "byteOffset": 217560,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 848000,
+      "byteOffset": 1489560,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 2337560,
+      "uri": "scene.bin"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ],
+      "name": "FrontColor",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.88235300000000005,
+          0.88235300000000005,
+          0.78431399999999996,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.93021349659999997
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Mesh1_FrontColor_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "name": "RootNode (gltf orientation matrix)",
+      "rotation": [
+        -0.70710678118654746,
+        -0,
+        -0,
+        0.70710678118654757
+      ]
+    },
+    {
+      "children": [
+        2
+      ],
+      "name": "RootNode (model correction matrix)"
+    },
+    {
+      "children": [
+        3
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "name": "703a4a3a3e0f4bbab4eaf1f54d2b6be9.fbx"
+    },
+    {
+      "children": [
+        4
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        5
+      ],
+      "name": "Model"
+    },
+    {
+      "children": [
+        6
+      ],
+      "name": "Component_2__3_1"
+    },
+    {
+      "children": [
+        7
+      ],
+      "name": "skp73_1"
+    },
+    {
+      "children": [
+        8
+      ],
+      "name": "Box01_1"
+    },
+    {
+      "children": [
+        9
+      ],
+      "name": "Mesh1"
+    },
+    {
+      "mesh": 0,
+      "name": "Mesh1_FrontColor_0"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "OSG_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.2.0/dist/aframe-physics-system.min.js"></script>
+    <style>
+      .text-input {
+        background-color: white;
+        height: 50px;
+        width: 100%;
+        max-width: 500px;
+        z-index: 10;
+        position: absolute;
+        left: 25%;
+        margin-left: auto;
+      }
+      .a-enter-vr-button {
+        display: none;
+      }
+      a-scene {
+        z-index: 1;
+      }
+    </style>
+  </head>
+  <body>
+
+    <input class="text-input" placeholder="Paste Image URL Here" type="text">
+    <button>DUMP IT</button>
+    <a-scene physics="gravity: -0.5">
+      <a-sky color="#ae2633"></a-sky>
+      <a-entity gltf-model="url(/toilet/scene.gltf)" position="0 -0.01 0" rotation="0 -90 0"></a-entity>
+      <a-plane color="#ae2633" height="100" width="100" rotation="-90 0 0"></a-plane>
+      <a-entity position="0 0.8 1"  rotation="-30 0 0">
+        <a-camera camera look-controls></a-camera>
+      </a-entity>
+    </a-scene>
+    <script>
+      var images = [];
+      var scene = document.querySelector('a-scene');
+    function generatePicture() {
+     
+      var image = document.createElement('a-image');
+      image.setAttribute('src', 'https://i.imgur.com/ikOOvQw.png?1');
+      image.setAttribute('dynamic-body', 'true');
+      image.setAttribute('position', '0 2 0.2');
+      image.setAttribute('height', '0.1');
+      image.setAttribute('width', '0.1');
+      scene.appendChild(image);
+      images.push(image);
+    }
+
+    function removeImages() {
+      images.map((image) => {
+        if (image.getAttribute('position').y < 0) {
+          scene.removeChild(image);
+        }
+      });
+      images = images.filter(image => image.getAttribute('position').y > 0);
+    }
+
+    setInterval(generatePicture, 1000);
+    setInterval(removeImages, 1000);
+    
+</script>
+  </body>
+</html>
