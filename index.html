@@ -22,9 +22,9 @@
     <meta name="msapplication-TileColor" content="#3f51b5">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@username">
+    <meta name="twitter:site" content="@dowrow">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="my-app">
+    <meta property="og:site_name" content="Dump">
     <meta property="og:image" content="images/manifest/icon-144x144.png" />
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
     <base href="/">
@@ -38,29 +38,110 @@
       }
       window.process = { env: { NODE_ENV: 'production' } };
     </script>
+    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     <style>
-      @font-face {
-        font-family: 'Pacifico';
-        font-style: normal;
-        font-weight: 400;
-        src: local('Pacifico Regular'), local('Pacifico-Regular'), url(https://fonts.gstatic.com/s/pacifico/v12/Q_Z9mv4hySLTMoMjnk_rCXYhjbSpvc47ee6xR_80Hnw.woff2) format('woff2');
-        font-display: swap;
-      }
       body {
+        position: relative;
         margin: 0;
-        font-family: Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-        line-height: 1.5;
         min-height: 100vh;
         -webkit-font-smoothing: antialiased;
+        width: 100%;
+        display: block;
+        padding: 24px;
+      }
+
+      .scene {
+        position: relative;
+        z-index: 1;
+      }
+
+      .url-input {
+        position: absolute;
+        bottom: 0;
+        height: 70px;
+        width: 100%;
+        background-color: #fefee1;
+        z-index: 2;
+        text-align: center;
+        font-size: 1.2em;
+        font-family: system-ui, Helvetica, Arial, sans-serif;
+        border: none;
+        outline: none;
+        color: #b0242f;
+        font-weight: bold;
+      }
+      
+      .url-input::placeholder {
+        color: #b0242fab;
+      }
+
+      .a-enter-vr-button {
+        display: none;
+      }
+
+      @media(min-width: 500px) {
+        .url-input {
+          height: 50px;
+          margin-left: -200px;
+          margin-bottom: 50px;
+          left: 50%;
+          max-width: 400px;
+          border-radius: 4px;
+        }
       }
     </style>
   </head>
   <body>
-    <my-app appTitle="my app"></my-app>
+    <a-scene class="scene" antialias="true"  physics="gravity: -0.5">
+      <a-sky color="#ae2633"></a-sky>
+      <a-entity gltf-model="url(/toilet/scene.gltf)" position="0 -0.01 0" rotation="0 -90 0"></a-entity>
+      <a-plane color="#ae2633" height="100" width="100" rotation="-90 0 0"></a-plane>
+      <a-entity position="0 0.9 1" rotation="-25 0 0" >
+        <a-camera camera look-controls></a-camera>
+      </a-entity>
+    </a-scene>
+    <input class="url-input" type="text" placeholder="Paste Image URL Here"/>
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>
-    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script type="module" src="src/components/my-app.js" crossorigin></script>
+    <script>
+
+      let images = [];
+      let url = 'https://i.imgur.com/ikOOvQw.png?1';
+      const scene = document.querySelector('a-scene');
+      let generateInterval = setInterval(generatePicture, 1000);
+      const removeInterval = setInterval(removeImages, 1000);
+
+      function generatePicture() {
+        var image = document.createElement('a-image');
+        image.setAttribute('src', url);
+        image.setAttribute('dynamic-body', 'true');
+        image.setAttribute('position', '0 2 0.2');
+        image.setAttribute('height', '0.1');
+        image.setAttribute('width', '0.1');
+        scene.appendChild(image);
+        images.push(image);
+      }
+
+      function removeImages() {
+        images.map((image) => {
+          if (image.getAttribute('position').y < 0) {
+            scene.removeChild(image);
+          }
+        });
+        if (images.length > 0) {
+          images = images.filter(image => image.getAttribute('position').y > 0);
+        }
+      }
+
+      function checkImage(url, good, bad) {
+        var img = new Image();
+        img.onload = good; 
+        img.onerror = bad;
+        img.src = url;
+      }
+
+    </script>
+    <script async src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.min.js"></script>
   </body>
 </html>
