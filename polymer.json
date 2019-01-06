@@ -2,7 +2,9 @@
   "entrypoint": "index.html",
   "shell": "src/components/my-app.js",
   "sources": [
-    "images/**/*"
+    "images/**/*",
+    "js/**/*",
+    "toilet/**/*"
   ],
   "extraDependencies": [
     "manifest.json",
