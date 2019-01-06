@@ -13,11 +13,19 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="My App">
-    <link rel="apple-touch-icon" href="images/manifest/icon-48x48.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/manifest/icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="96x96" href="images/manifest/icon-96x96.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="images/manifest/icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="images/manifest/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="images/manifest/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="images/manifest/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/manifest/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/manifest/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/manifest/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/manifest/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/manifest/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/manifest/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/manifest/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="images/manifest/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/manifest/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="images/manifest/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/manifest/favicon-16x16.png">
     <meta name="msapplication-TileImage" content="images/manifest/icon-144x144.png">
     <meta name="msapplication-TileColor" content="#3f51b5">
     <meta name="msapplication-tap-highlight" content="no">
@@ -36,9 +44,8 @@
           });
         });
       }
-      window.process = { env: { NODE_ENV: 'production' } };
     </script>
-    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+    <script src="./js/aframe.min.js"></script>
     <style>
       body {
         position: relative;
@@ -57,7 +64,7 @@
 
       .url-input {
         position: absolute;
-        bottom: 0;
+        top: 0;
         height: 70px;
         width: 100%;
         background-color: #fefee1;
@@ -69,6 +76,14 @@
         outline: none;
         color: #b0242f;
         font-weight: bold;
+        margin-bottom: 50px;
+      }
+
+      .sharethis-inline-share-buttons {
+        position: absolute;
+        bottom: 0;
+        z-index: 2;
+        width: 100%;
       }
       
       .url-input::placeholder {
@@ -83,24 +98,33 @@
         .url-input {
           height: 50px;
           margin-left: -200px;
-          margin-bottom: 50px;
+          margin-bottom: 77px;
           left: 50%;
           max-width: 400px;
           border-radius: 4px;
+          bottom: 0;
+          top: auto;
+        }
+        .sharethis-inline-share-buttons {
+          margin-left: -200px;
+          left: 50%;
+          max-width: 400px;
+          margin-bottom: 20px;
         }
       }
     </style>
   </head>
   <body>
-    <a-scene class="scene" antialias="true"  physics="gravity: -0.5">
+    <a-scene class="scene" antialias="true"  physics="gravity: -0.1">
       <a-sky color="#ae2633"></a-sky>
-      <a-entity gltf-model="url(/toilet/scene.gltf)" position="0 -0.01 0" rotation="0 -90 0"></a-entity>
-      <a-plane color="#ae2633" height="100" width="100" rotation="-90 0 0"></a-plane>
-      <a-entity position="0 0.9 1" rotation="-25 0 0" >
-        <a-camera camera look-controls></a-camera>
+      <a-entity static-body gltf-model="url(/toilet/scene.gltf)" position="0 -0.01 0" rotation="0 -90 0"></a-entity>
+      <a-plane static-body color="#ae2633" height="100" width="100" rotation="-90 0 0"></a-plane>
+      <a-entity static-body position="0 0.9 1" rotation="-25 0 0" >
+        <a-camera static-body camera look-controls></a-camera>
       </a-entity>
     </a-scene>
     <input class="url-input" type="text" placeholder="Paste Image URL Here"/>
+    <div class="sharethis-inline-share-buttons"></div>
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>
@@ -109,39 +133,64 @@
       let images = [];
       let url = 'https://i.imgur.com/ikOOvQw.png?1';
       const scene = document.querySelector('a-scene');
-      let generateInterval = setInterval(generatePicture, 1000);
-      const removeInterval = setInterval(removeImages, 1000);
+      let generateInterval = setInterval(generatePicture, 2000);
+      const removeInterval = setInterval(removeImages, 2000);
+
+      document.querySelector('.url-input').addEventListener('input', (event) => {
+        const inputData = event.target.value;
+        document.location.href = '?image=' + encodeURIComponent(inputData);
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const imageUrl = getImageParameter();
+        if (imageUrl) {
+          document.querySelector('.url-input').value = decodeURIComponent(imageUrl);
+          checkImage(imageUrl, () => {
+            url = decodeURIComponent(imageUrl);
+          }, () => {});
+        }
+      });
 
       function generatePicture() {
-        var image = document.createElement('a-image');
-        image.setAttribute('src', url);
-        image.setAttribute('dynamic-body', 'true');
-        image.setAttribute('position', '0 2 0.2');
-        image.setAttribute('height', '0.1');
-        image.setAttribute('width', '0.1');
-        scene.appendChild(image);
-        images.push(image);
+        if (!document.hidden){ 
+          const image = document.createElement('a-image');
+          image.setAttribute('src', url);
+          image.setAttribute('dynamic-body', 'true');
+          image.setAttribute('position', '0 1.3 0.2');
+          image.setAttribute('height', '0.1');
+          image.setAttribute('width', '0.1');
+          image.setAttribute('mass', '1');
+          scene.appendChild(image);
+          images.push(image);
+        }
       }
 
       function removeImages() {
-        images.map((image) => {
-          if (image.getAttribute('position').y < 0) {
-            scene.removeChild(image);
+        if (!document.hidden) {
+          images.map((image) => {
+            if (image.getAttribute('position').y < 0) {
+              scene.removeChild(image);
+            }
+          });
+          if (images.length > 0) {
+            images = images.filter(image => image.getAttribute('position').y > 0);
           }
-        });
-        if (images.length > 0) {
-          images = images.filter(image => image.getAttribute('position').y > 0);
         }
       }
 
       function checkImage(url, good, bad) {
-        var img = new Image();
+        const img = new Image();
         img.onload = good; 
         img.onerror = bad;
         img.src = url;
       }
 
+      function getImageParameter() {
+        const url = new URL(document.location.href);
+        return url.searchParams.get("image");
+      }
+
     </script>
-    <script async src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.min.js"></script>
+    <script src='//platform-api.sharethis.com/js/sharethis.js#property=596a858e0f81140011019910&product=inline-share-buttons' async='async'></script>
   </body>
 </html>
