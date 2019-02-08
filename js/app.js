@@ -12,6 +12,10 @@ let generateInterval = null;
 	}
 	document.head.append(aframe);
 	initShareButtons();
+	document.querySelector('.url-input').onfocus = (event) => {
+		console.log('focus!');
+		event.target.value = ''
+	}
 })();
 
 function initScene() {
@@ -44,17 +48,17 @@ document.querySelector('.url-input').addEventListener('input', (event) => {
 document.addEventListener('DOMContentLoaded', () => {
 	const imageUrl = getImageParameter();
 	if (imageUrl) {
-		document.querySelector('.url-input').value = decodeURIComponent(imageUrl);
-		checkImage(imageUrl, onImageLoad, onImageError);
+		checkImage(imageUrl, () => onImageLoad(imageUrl), onImageError);
 	}
 });
 
-function onImageLoad() {
+function onImageLoad(imageUrl) {
 	url = decodeURIComponent(imageUrl);
+	document.querySelector('.url-input').value = url;
 }
 
 function onImageError() {
-	alert('The pasted URL is not a valid image');
+	alert('The URL is not a valid image or their server doesn\'t allow us to use it');
 }
 
 function generatePicture() {
@@ -80,6 +84,7 @@ function generatePicture() {
 
 function checkImage(url, good, bad) {
 	const img = new Image();
+	img.crossOrigin = '';
 	img.onload = good;
 	img.onerror = bad;
 	img.src = url;
