@@ -34,7 +34,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Dump">
     <meta property="og:image" content="images/manifest/icon-144x144.png" />
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link rel="preload" href="./js/aframe.min.js" as="script">
     <base href="/">
     <script>
       if ('serviceWorker' in navigator) {
@@ -45,33 +45,48 @@
         });
       }
     </script>
-    <script src="./js/aframe.min.js"></script>
     <style>
+      * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-family: system-ui, Helvetica, Arial, sans-serif;
+      }
+
       body {
         position: relative;
         margin: 0;
-        min-height: 100vh;
+        min-height:100%;
         -webkit-font-smoothing: antialiased;
         width: 100%;
         display: block;
         padding: 24px;
+        background-color: #ae2633;
+      }
+
+      .scene-container {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
 
       .scene {
         position: relative;
         z-index: 1;
+        min-height: 100%;
       }
 
       .url-input {
         position: absolute;
         top: 0;
-        height: 70px;
+        left: 0;
+        padding: 0;
+        height: 50px;
         width: 100%;
         background-color: #fefee1;
         z-index: 2;
         text-align: center;
         font-size: 1.2em;
-        font-family: system-ui, Helvetica, Arial, sans-serif;
         border: none;
         outline: none;
         color: #b0242f;
@@ -79,13 +94,39 @@
         margin-bottom: 50px;
       }
 
-      .sharethis-inline-share-buttons {
+      .share-bar {
+        display: flex;
         position: absolute;
         bottom: 0;
         z-index: 2;
         width: 100%;
+        padding: 10px;
+      }
+
+      .share-button {
+        flex: 1;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 5px;
+        height: 50px;
+        color: #ffffff;
+        font-weight: bold;
+        line-height: 50px;
+      }
+
+      .share-button + .share-button {
+        margin-left: 10px;
+      }
+
+      .share-button--twitter {
+        background-color: #1dcaff;
       }
       
+      .share-button--facebook {
+        background-color: #3b5998;
+      }
+
       .url-input::placeholder {
         color: #b0242fab;
       }
@@ -95,17 +136,19 @@
       }
 
       @media(min-width: 500px) {
+
         .url-input {
           height: 50px;
-          margin-left: -200px;
-          margin-bottom: 77px;
+          margin-left: -190px;
+          margin-bottom: 90px;
           left: 50%;
-          max-width: 400px;
+          max-width: 380px;
           border-radius: 4px;
           bottom: 0;
           top: auto;
         }
-        .sharethis-inline-share-buttons {
+
+        .share-bar {
           margin-left: -200px;
           left: 50%;
           max-width: 400px;
@@ -115,82 +158,25 @@
     </style>
   </head>
   <body>
-    <a-scene class="scene" antialias="true"  physics="gravity: -0.1">
-      <a-sky color="#ae2633"></a-sky>
-      <a-entity gltf-model="url(/toilet/scene.gltf)" position="0 -0.01 0" rotation="0 -90 0"></a-entity>
-      <a-plane static-body color="#ae2633" height="100" width="100" rotation="-90 0 0"></a-plane>
-      <a-entity static-body position="0 0.9 1" rotation="-25 0 0" >
-        <a-camera static-body camera look-controls></a-camera>
-      </a-entity>
-    </a-scene>
+    <div class="scene-container"></div>
     <input class="url-input" type="text" placeholder="Paste Image URL Here"/>
-    <div class="sharethis-inline-share-buttons"></div>
+    <div class="share-bar">
+      <a 
+        class="share-button share-button--twitter" 
+        href="https://twitter.com/intent/tweet"
+        target="_blank">
+        Share on Twitter
+      </a>
+      <a 
+        class="share-button share-button--facebook" 
+        href="https://www.facebook.com/sharer/sharer.php"
+        target="_blank">
+        Share on Facebook
+      </a>
+    </div>
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>
-    <script>
-
-      let images = [];
-      let url = 'https://i.imgur.com/ikOOvQw.png?1';
-      const scene = document.querySelector('a-scene');
-      let generateInterval = setInterval(generatePicture, 2000);
-      const removeInterval = setInterval(removeImages, 2000);
-
-      document.querySelector('.url-input').addEventListener('input', (event) => {
-        const inputData = event.target.value;
-        document.location.href = '?image=' + encodeURIComponent(inputData);
-      });
-
-      document.addEventListener('DOMContentLoaded', () => {
-        const imageUrl = getImageParameter();
-        if (imageUrl) {
-          document.querySelector('.url-input').value = decodeURIComponent(imageUrl);
-          checkImage(imageUrl, () => {
-            url = decodeURIComponent(imageUrl);
-          }, () => {});
-        }
-      });
-
-      function generatePicture() {
-        if (!document.hidden){ 
-          const image = document.createElement('a-image');
-          image.setAttribute('src', url);
-          image.setAttribute('dynamic-body', 'true');
-          image.setAttribute('position', '0 1.3 0.2');
-          image.setAttribute('height', '0.1');
-          image.setAttribute('width', '0.1');
-          image.setAttribute('mass', '1');
-          scene.appendChild(image);
-          images.push(image);
-        }
-      }
-
-      function removeImages() {
-        if (!document.hidden) {
-          images.map((image) => {
-            if (image.getAttribute('position').y < 0) {
-              scene.removeChild(image);
-            }
-          });
-          if (images.length > 0) {
-            images = images.filter(image => image.getAttribute('position').y > 0);
-          }
-        }
-      }
-
-      function checkImage(url, good, bad) {
-        const img = new Image();
-        img.onload = good; 
-        img.onerror = bad;
-        img.src = url;
-      }
-
-      function getImageParameter() {
-        const url = new URL(document.location.href);
-        return url.searchParams.get("image");
-      }
-
-    </script>
-    <script src='//platform-api.sharethis.com/js/sharethis.js#property=596a858e0f81140011019910&product=inline-share-buttons' async='async'></script>
+    <script src="/js/app.js"></script>
   </body>
 </html>

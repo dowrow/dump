@@ -2,7 +2,7 @@
   "name": "Dump",
   "short_name": "Dump",
   "description": "Don't like it? Dump it into the toilet!",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "theme_color": "#ae2633",
   "background_color": "#ae2633",
