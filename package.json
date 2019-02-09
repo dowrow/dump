@@ -1,11 +1,11 @@
 {
-  "name": "pwa-starter-kit",
-  "version": "0.9.0",
+  "name": "Toilet",
+  "version": "1.0.0",
   "contributors": [
-    "The Polymer Authors"
+    "Diego Castaño - @dowrow"
   ],
-  "license": "BSD-3-Clause",
-  "repository": "Polymer/pwa-starter-kit",
+  "license": "None",
+  "repository": "dowrow/toilet",
   "scripts": {
     "start": "polymer serve --hostname=0.0.0.0",
     "build": "npm run build:prpl-server && npm run build:static",
