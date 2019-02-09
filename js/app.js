@@ -13,7 +13,6 @@ let generateInterval = null;
 	document.head.append(aframe);
 	initShareButtons();
 	document.querySelector('.url-input').onfocus = (event) => {
-		console.log('focus!');
 		event.target.value = ''
 	}
 })();
